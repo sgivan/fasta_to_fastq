@@ -1,11 +1,11 @@
 #!/usr/bin/env perl 
 #===============================================================================
 #
-#         FILE:  test.pl
+#         FILE:  fasta_2_qual.pl
 #
-#        USAGE:  ./test.pl  
+#        USAGE:  ./fasta_2_qual.pl
 #
-#  DESCRIPTION:  
+#  DESCRIPTION:  Script to generate phred-style quality file for a fasta file
 #
 #      OPTIONS:  ---
 # REQUIREMENTS:  ---

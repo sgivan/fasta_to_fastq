@@ -1,11 +1,11 @@
 #!/usr/bin/env perl 
 #===============================================================================
 #
-#         FILE:  test.pl
+#         FILE:  fasta_to_fastq.pl
 #
-#        USAGE:  ./test.pl  
+#        USAGE:  ./fasta_to_fastq.pl
 #
-#  DESCRIPTION:  
+#  DESCRIPTION:  Script to create a fastq file from a fasta file
 #
 #      OPTIONS:  ---
 # REQUIREMENTS:  ---
