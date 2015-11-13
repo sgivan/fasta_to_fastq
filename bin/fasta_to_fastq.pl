@@ -20,17 +20,19 @@
 
 use 5.010;      # Require at least Perl version 5.10
 use autodie;
-#use Getopt::Long; # use GetOptions function to for CL args
+use Getopt::Long; # use GetOptions function to for CL args
 use warnings;
 use strict;
 
-my ($debug,$verbose,$help);
+my ($debug,$verbose,$help,$infile,$qual_only);
 
-#my $result = GetOptions(
-#    "debug"     =>  \$debug,
-#    "verbose"   =>  \$verbose,
-#    "help"      =>  \$help,
-#);
+my $result = GetOptions(
+    "debug"     =>  \$debug,
+    "verbose"   =>  \$verbose,
+    "infile:s"  =>  \$infile,
+    "qual_only" =>  \$qual_only,
+    "help"      =>  \$help,
+);
 
 if ($help) {
     help();
@@ -56,41 +58,49 @@ if ($help) {
 use strict;
 
 my $file = $ARGV[0];
-#print "file: '$file'";
-#exit();
-open FILE, $file;
+open(FILE,"<",$infile);
 
 my ($header, $sequence, $sequence_length, $sequence_quality);
 while(<FILE>) {
-        chomp $_;
-        if ($_ =~ /^>(.+)/) {
-                if($header ne "") {
-                        print "\@".$header."\n";
-                        print $sequence."\n";
-                        print "+"."\n";
-                        print $sequence_quality."\n";
-                }
-                $header = $1;
-		$sequence = "";
-		$sequence_length = "";
-		$sequence_quality = "";
+    chomp $_;
+    if ($_ =~ /^>(.+)/) {
+        if($header ne "") {
+            unless ($qual_only) {
+                print "\@".$header."\n";
+                print $sequence."\n";
+            }
+            print "+$header"."\n";
+            print $sequence_quality."\n";
         }
-	else { 
-		$sequence .= $_;
-		$sequence_length = length($_); 
-		for(my $i=0; $i<$sequence_length; $i++) {$sequence_quality .= "I"} 
-	}
+        $header = $1;
+        $sequence = "";
+        $sequence_length = "";
+        $sequence_quality = "";
+    } else { 
+        $sequence .= $_;
+        $sequence_length = length($_); 
+        for(my $i=0; $i<$sequence_length; $i++) {$sequence_quality .= "I"} 
+    }
 }
 close FILE;
-print "\@".$header."\n";
-print $sequence."\n";
-print "+"."\n";
+unless ($qual_only) {
+    print "\@".$header."\n";
+    print $sequence."\n";
+}
+print "+$header"."\n";
 print $sequence_quality."\n";
 
 
 sub help {
 
-    say <<HELP;
+say <<HELP;
+
+  
+    "debug"     =>  \$debug,
+    "verbose"   =>  \$verbose,
+    "infile:s"  =>  \$infile,
+    "qual_only" =>  \$qual_only,
+    "help"      =>  \$help,
 
 
 HELP
